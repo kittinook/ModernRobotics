@@ -123,6 +123,23 @@ function so3ToVec(so3mat::so3):
     return [so3mat[3][2] so3mat[1][3] so3mat[2][1]]
 end
 
+# think about a good return type for this
 function AxisAng3(expc3)
     return (normalize(expc3), norm(expc3))
+end
+
+function eye(x)::Matrix
+    return Diagonal(ones(x,x))
+end
+
+
+function MatrixExp3(so3mat::so3)
+    omgtheta = so3toVec(so3mat)
+    if NearZero(norm(omgtheta))
+        return eye(3,3)
+    else
+        theta = AxisAng3(omgtheta)[1]
+        omgmat = so3mat / theta
+        return eye(3,3)
+    end
 end
